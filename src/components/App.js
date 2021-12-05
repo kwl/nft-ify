@@ -58,6 +58,12 @@ class App extends Component {
       // this.setState({
       //   images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
       // })
+      const tokenUris = await decentragram.methods.getAllURIs().call()
+      const images = []
+      for (let i = 0; i < tokenUris.length; i++) {
+        ipfs.
+        images.push()
+      }
       this.setState({ loading: false})
 
       decentragram.once("NFTCreated", {}, function(err, event) {
