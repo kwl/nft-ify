@@ -1,12 +1,30 @@
 pragma solidity >0.5.0;
 
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
-// import "@openzeppelin/contracts/utils/Counters.sol";
 
+// import "@openzeppelin/contracts/utils/Counters.sol";
 
 //this contract inherits ERC721
 contract NFTify is ERC721URIStorage {
     uint256 public tokenCounter;
+
+    // string public name;
+    // uint256 public imageCount = 0;
+    // mapping(uint256 => NFT) public nfts;
+
+    // struct NFT {
+    //     uint256 id;
+    //     string hash;
+    //     string description;
+    //     uint256 tipAmount;
+    //     address payable author;
+    // }
+
+    event NFTCreated(
+        uint256 id,
+        string hash,
+        string description
+    );
 
     //constructor for an ERC721 is a name and symbol
     constructor() public ERC721("astronaut", "STAR") {
@@ -17,13 +35,15 @@ contract NFTify is ERC721URIStorage {
     //after we mint the token we are going to return the id of the token
     function uploadImage(string memory _imgHash, string memory _description)
         public
-        returns (uint256)
+        returns (address)
     {
         //get number from token counter
         uint256 newNFTTokenId = tokenCounter;
 
         //safely mint token for the person that called the function
         _safeMint(msg.sender, newNFTTokenId);
+        require(_exists(newNFTTokenId));
+        // _mint(msg.sender, newNFTTokenId);
 
         //set the token uri of the token id of the uri passed
         _setTokenURI(newNFTTokenId, _imgHash);
@@ -31,7 +51,9 @@ contract NFTify is ERC721URIStorage {
         //increment the counter
         tokenCounter = tokenCounter + 1;
 
+        emit NFTCreated(newNFTTokenId, _imgHash, _description);
+
         //return the token id
-        return newNFTTokenId;
+        return ownerOf(newNFTTokenId);
     }
 }

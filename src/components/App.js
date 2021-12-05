@@ -59,6 +59,13 @@ class App extends Component {
       //   images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
       // })
       this.setState({ loading: false})
+
+      decentragram.once("NFTCreated", {}, function(err, event) {
+        if (err) {
+          console.err(err);
+        }
+        console.log(event);
+      });
     } else {
       window.alert('Decentragram contract not deployed to detected network.')
     }
@@ -90,10 +97,12 @@ class App extends Component {
 
       this.setState({ loading: true })
 
-      this.state.decentragram.methods.uploadImage(result[0].hash, description).send({ from: this.state.account }).on('transactionHash', (hash) => {
-        this.setState({ loading: false });
-        console.log('ribbitt');
-      })
+      this.state.decentragram.methods.uploadImage(result[0].hash, description)
+        .send({ from: this.state.account })
+        .on('transactionHash', (hash) => {
+          this.setState({ loading: false });
+          console.log('ribbitt');
+        })
     })
   }
 
