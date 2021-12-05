@@ -1,6 +1,8 @@
-pragma solidity ^0.6.6;
+pragma solidity ^0.8.8;
 
-import "github.com/OpenZeppelin/openzeppelin-contracts/blob/release-v3.4/contracts/token/ERC721/ERC721.sol";
+import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
+
+// import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/master/contracts/token/ERC721/ERC721.sol";
 
 //this contract inherits ERC721
 contract NFTify is ERC721 {

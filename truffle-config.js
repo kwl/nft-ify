@@ -14,7 +14,7 @@ module.exports = {
       network_id: "*" // Match any network id
     },
     ropsten: {
-      provider: function() {
+      provider: function () {
         return new HDWalletProvider(
           privateKeys.split(','), // Array of account private keys
           `https://ropsten.infura.io/v3/${process.env.INFURA_API_KEY}`// Url to an Ethereum Node
@@ -39,6 +39,7 @@ module.exports = {
   contracts_build_directory: './src/abis/',
   compilers: {
     solc: {
+      version: "0.8.8",
       optimizer: {
         enabled: true,
         runs: 200
