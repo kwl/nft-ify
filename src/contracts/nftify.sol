@@ -24,7 +24,7 @@ contract NFTify is ERC721Enumerable, ERC721URIStorage {
     );
 
     //constructor for an ERC721 is a name and symbol
-    constructor() public ERC721("astronaut", "STAR") {
+    constructor() public ERC721("BlockTops", "SNKZ") {
         tokenCounter = 0;
     }
 
@@ -83,7 +83,7 @@ contract NFTify is ERC721Enumerable, ERC721URIStorage {
         return ownerOf(newNFTTokenId);
     }
 
-    function getAllURIs() public returns (string[] memory) {
+    function getAllURIs() public view returns (string[] memory) {
         // string[] storage uris;
         uint numTokens = balanceOf(msg.sender);
         string[] memory uris = new string[](numTokens);
