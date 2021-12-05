@@ -24,7 +24,7 @@ contract NFTify is ERC721 {
         _safeMint(msg.sender, newNFTTokenId);
 
         //set the token uri of the token id of the uri passed
-        _setTokenURI(newNFTTokenId, tokenURI);
+        _setTokenURI(newNFTTokenId, _imgHash);
 
         //increment the counter
         tokenCounter = tokenCounter + 1;
