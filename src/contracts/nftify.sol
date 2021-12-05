@@ -1,11 +1,12 @@
 pragma solidity >0.5.0;
 
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721FULL.sol";
 
 // import "@openzeppelin/contracts/utils/Counters.sol";
 
 //this contract inherits ERC721
-contract NFTify is ERC721URIStorage {
+contract NFTify is ERC721Full {
     uint256 public tokenCounter;
 
     uint256 public imageCount = 0;
@@ -52,5 +53,15 @@ contract NFTify is ERC721URIStorage {
 
         //return the token id
         return ownerOf(newNFTTokenId);
+    }
+
+    function getAllURIs() public returns (string[] memory) {
+        string[] uris = new string[];
+        uint numTokens = balanceOf(msg.sender);
+        for (uint i = 0; i < numTokens; i++) {
+            uint tokenId = tokenOfOwnerByIndex(msg.sender, i);
+            uris.push(tokenUri(tokenId));
+        }
+        return uris;
     }
 }
