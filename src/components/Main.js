@@ -31,9 +31,9 @@ class Main extends Component {
               </form>
               <p>&nbsp;</p>
               { this.props.images.map((image, key) => {
-                return(
+                return( 
                   <div className="card mb-4" key={key} >
-                    <div className="card-header">
+                    {/* <div className="card-header">
                       <img
                         className='mr-2'
                         width='30'
@@ -41,13 +41,13 @@ class Main extends Component {
                         src={`data:image/png;base64,${new Identicon(image.author, 30).toString()}`}
                       />
                       <small className="text-muted">{image.author}</small>
-                    </div>
+                    </div> */}
                     <ul id="imageList" className="list-group list-group-flush">
                       <li className="list-group-item">
                         <p class="text-center"><img src={`https://ipfs.infura.io/ipfs/${image.hash}`} style={{ maxWidth: '420px'}}/></p>
                         <p>{image.description}</p>
                       </li>
-                      <li key={key} className="list-group-item py-2">
+                      {/* <li key={key} className="list-group-item py-2">
                         <small className="float-left mt-1 text-muted">
                           TIPS: {window.web3.utils.fromWei(image.tipAmount.toString(), 'Ether')} ETH
                         </small>
@@ -62,7 +62,7 @@ class Main extends Component {
                         >
                           TIP 0.1 ETH
                         </button>
-                      </li>
+                      </li> */}
                     </ul>
                   </div>
                 )

@@ -32,19 +32,38 @@ class App extends Component {
   }
 
   async loadBlockchainData() {
-    const web3 = window.web3
+    const web3 = window.web3;
     // Load account
-    const accounts = await web3.eth.getAccounts()
+    const accounts = await web3.eth.getAccounts();
     this.setState({ account: accounts[0] })
-
     // Network ID
     const networkId = await web3.eth.net.getId()
-    console.log("network id = " + networkId);
-    console.log("this.state.account = " + this.state.account);
+    console.log(networkId);
     const networkData = NFTify.networks[networkId]
     if(networkData) {
-      const decentragram = new web3.eth.Contract(NFTify.abi, networkData.address)
-      this.setState({ decentragram })
+      const pulaksContract = new web3.eth.Contract(NFTify.abi, networkData.address)
+      this.setState({ pulaksContract })
+      console.log(pulaksContract);
+      // console.log(await pulaksContract.methods.balanceOf.call());
+      console.log(await pulaksContract.methods.balanceOf(this.state.account).call());
+      const totalSupply = await pulaksContract.methods.totalSupply().call();
+
+      for( let i = totalSupply-1; i >= 0; i--) {
+        const newImage = {
+          hash : await pulaksContract.methods.tokenURI(i).call(),
+          description : "kitten time",
+        };
+
+        this.setState({
+          images : [...this.state.images, newImage]
+        })
+      }
+
+
+      // console.log(newImage);
+      // this.setState({images: [newImage] });
+
+
       // const imagesCount = await decentragram.methods.imageCount().call()
       // this.setState({ imagesCount })
       // Load images
@@ -58,20 +77,9 @@ class App extends Component {
       // this.setState({
       //   images: this.state.images.sort((a,b) => b.tipAmount - a.tipAmount )
       // })
-      const tokenUris = await decentragram.methods.getAllURIs().call()
-      const images = []
-      for (let i = 0; i < tokenUris.length; i++) {
-        ipfs.
-        images.push()
-      }
+      console.log(this.state.images);
+      console.log("meowth");
       this.setState({ loading: false})
-
-      decentragram.once("NFTCreated", {}, function(err, event) {
-        if (err) {
-          console.err(err);
-        }
-        console.log(event);
-      });
     } else {
       window.alert('Decentragram contract not deployed to detected network.')
     }
@@ -91,7 +99,7 @@ class App extends Component {
   }
 
   uploadImage = description => {
-    // console.log("Submitting file to ipfs...")
+    console.log("Submitting file to ipfs...")
 
     //adding file to the IPFS
     ipfs.add(this.state.buffer, (error, result) => {
@@ -102,34 +110,30 @@ class App extends Component {
       }
 
       this.setState({ loading: true })
-
-      this.state.decentragram.methods.uploadImage(result[0].hash, description)
-        .send({ from: this.state.account })
-        .on('transactionHash', (hash) => {
-          this.setState({ loading: false });
-          console.log('ribbitt');
-        })
+      this.state.pulaksContract.methods.uploadImage(result[0].hash, description).send({ from: this.state.account }).on('transactionHash', (hash) => {
+        this.setState({ loading: false })
+      })
     })
   }
 
-  // tipImageOwner(id, tipAmount) {
-  //   this.setState({ loading: true })
-  //   this.state.decentragram.methods.tipImageOwner(id).send({ from: this.state.account, value: tipAmount }).on('transactionHash', (hash) => {
-  //     this.setState({ loading: false })
-  //   })
-  // }
+  tipImageOwner(id, tipAmount) {
+    this.setState({ loading: true })
+    this.state.pulaksContract.methods.tipImageOwner(id).send({ from: this.state.account, value: tipAmount }).on('transactionHash', (hash) => {
+      this.setState({ loading: false })
+    })
+  }
 
   constructor(props) {
     super(props)
     this.state = {
       account: '',
-      decentragram: null,
+      pulaksContract: null,
       images: [],
       loading: true
     }
 
     this.uploadImage = this.uploadImage.bind(this)
-    // this.tipImageOwner = this.tipImageOwner.bind(this)
+    this.tipImageOwner = this.tipImageOwner.bind(this)
     this.captureFile = this.captureFile.bind(this)
   }
 
@@ -143,7 +147,7 @@ class App extends Component {
               images={this.state.images}
               captureFile={this.captureFile}
               uploadImage={this.uploadImage}
-              // tipImageOwner={this.tipImageOwner}
+              tipImageOwner={this.tipImageOwner}
             />
         }
       </div>
