@@ -49,9 +49,13 @@ class App extends Component {
       const totalSupply = await pulaksContract.methods.totalSupply().call();
 
       for( let i = totalSupply-1; i >= 0; i--) {
+        const tokenURI = await pulaksContract.methods.tokenURI(i).call();
+        const owner = await pulaksContract.methods.ownerOf(i).call();
+
         const newImage = {
-          hash : await pulaksContract.methods.tokenURI(i).call(),
-          description : "kitten time",
+          hash : tokenURI,
+          author : owner,
+          description : i
         };
 
         this.setState({
