@@ -83,15 +83,16 @@ contract NFTify is ERC721Enumerable, ERC721URIStorage {
         return ownerOf(newNFTTokenId);
     }
 
-    // function getAllURIs() public returns (string[] memory) {
-    //     string[] storage uris;
-    //     uint numTokens = balanceOf(msg.sender);
-    //     for (uint i = 0; i < numTokens; i++) {
-    //         uint tokenId = tokenOfOwnerByIndex(msg.sender, i);
-    //         uris.push(tokenURI(tokenId));
-    //     }
-    //     return uris;
-    // }
+    function getAllURIs() public returns (string[] memory) {
+        // string[] storage uris;
+        uint numTokens = balanceOf(msg.sender);
+        string[] memory uris = new string[](numTokens);
+        for (uint i = 0; i < numTokens; i++) {
+            uint tokenId = tokenOfOwnerByIndex(msg.sender, i);
+            uris[i] = (tokenURI(tokenId));
+        }
+        return uris;
+    }
 
     
 }
