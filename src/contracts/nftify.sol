@@ -8,17 +8,14 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 contract NFTify is ERC721URIStorage {
     uint256 public tokenCounter;
 
-    // string public name;
-    // uint256 public imageCount = 0;
-    // mapping(uint256 => NFT) public nfts;
+    uint256 public imageCount = 0;
+    mapping(uint256 => NFT) public nfts;
 
-    // struct NFT {
-    //     uint256 id;
-    //     string hash;
-    //     string description;
-    //     uint256 tipAmount;
-    //     address payable author;
-    // }
+    struct NFT {
+        uint256 id;
+        string hash;
+        string description;
+    }
 
     event NFTCreated(
         uint256 id,
