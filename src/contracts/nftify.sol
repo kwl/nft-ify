@@ -1,12 +1,11 @@
 pragma solidity >0.5.0;
 
-// import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
+import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 
-// import "@openzeppelin/contracts/utils/Counters.sol";
 
 //this contract inherits ERC721
-contract NFTify is ERC721Enumerable {
+contract NFTify is ERC721Enumerable, ERC721URIStorage {
     uint256 public tokenCounter;
 
     uint256 public imageCount = 0;
@@ -27,6 +26,35 @@ contract NFTify is ERC721Enumerable {
     //constructor for an ERC721 is a name and symbol
     constructor() public ERC721("astronaut", "STAR") {
         tokenCounter = 0;
+    }
+
+    function _beforeTokenTransfer(address from, address to, uint256 tokenId)
+        internal
+        override(ERC721, ERC721Enumerable)
+    {
+        super._beforeTokenTransfer(from, to, tokenId);
+    }
+
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
+        super._burn(tokenId);
+    }
+
+    function tokenURI(uint256 tokenId)
+        public
+        view
+        override(ERC721, ERC721URIStorage)
+        returns (string memory)
+    {
+        return super.tokenURI(tokenId);
+    }
+
+    function supportsInterface(bytes4 interfaceId)
+        public
+        view
+        override(ERC721, ERC721Enumerable)
+        returns (bool)
+    {
+        return super.supportsInterface(interfaceId);
     }
 
     //a token url is a ipfs url
@@ -55,18 +83,15 @@ contract NFTify is ERC721Enumerable {
         return ownerOf(newNFTTokenId);
     }
 
-    function getAllURIs() public returns (string[] memory) {
-        string[] uris = new string[];
-        uint numTokens = balanceOf(msg.sender);
-        for (uint i = 0; i < numTokens; i++) {
-            uint tokenId = tokenOfOwnerByIndex(msg.sender, i);
-            uris.push(tokenURI(tokenId));
-        }
-        return uris;
-    }
+    // function getAllURIs() public returns (string[] memory) {
+    //     string[] storage uris;
+    //     uint numTokens = balanceOf(msg.sender);
+    //     for (uint i = 0; i < numTokens; i++) {
+    //         uint tokenId = tokenOfOwnerByIndex(msg.sender, i);
+    //         uris.push(tokenURI(tokenId));
+    //     }
+    //     return uris;
+    // }
 
-    function _setTokenURI(uint256 tokenId, string memory _tokenURI) internal virtual {
-        require(_exists(tokenId), "ERC721URIStorage: URI set of nonexistent token");
-        _tokenURIs[tokenId] = _tokenURI;
-    }
+    
 }
